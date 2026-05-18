@@ -46,23 +46,7 @@ body {
       html5: "prefer",
       mobilescale: 1.0,
       passQueryParameters: true,
-      initvars: { address_swf: "true", lang: "uk" },
-      onready: function(krpano) {
-        // IFRAME FALLBACK:
-        // Коли тур запущений всередині iframe (window !== top), плагін
-        // swfaddress не тригерить завантаження стартової сцени через
-        // обмеження браузера. Як наслідок — чорний екран. Тут робимо
-        // підстраховку: після готовності krpano перевіряємо, чи активна
-        // якась сцена; якщо ні — підвантажуємо першу сцену з XML.
-        setTimeout(function() {
-          if (!krpano.get('xml.scene')) {
-            var firstScene = krpano.get('scene[0].name');
-            if (firstScene) {
-              krpano.call('loadscene(' + firstScene + ', null, MERGE, BLEND(1))');
-            }
-          }
-        }, 800);
-      }
+      initvars: { address_swf: "true", lang: "uk" }
     });
   </script>
 </div>
@@ -71,6 +55,45 @@ body {
   function krpano() { return document.getElementById('krpanoSWFObject'); }
   function back()    { history.back(); }
   function forward() { history.forward(); }
+
+  // ===== IFRAME / fallback initial scene loader =====
+  // Стара версія embedpano не підтримує onready-callback, тому замість нього
+  // використовуємо polling. Кожні 200мс перевіряємо чи API krpano готовий.
+  // Як тільки готовий — якщо жодна сцена не активна (типовий стан в iframe,
+  // де swfaddress не тригерить початкове завантаження через cross-origin),
+  // вручну завантажуємо першу сцену з XML. У standalone-режимі swfaddress
+  // встигне першим — і polling нічого не зробить.
+  (function () {
+    var attempts = 0;
+    var MAX_ATTEMPTS = 60; // ~12 секунд максимум
+
+    function tryStart() {
+      attempts++;
+      var k = document.getElementById('krpanoSWFObject');
+
+      if (k && typeof k.get === 'function') {
+        try {
+          // API готовий — перевіряємо чи завантажена сцена
+          if (!k.get('xml.scene')) {
+            var firstScene = k.get('scene[0].name');
+            if (firstScene) {
+              k.call('loadscene(' + firstScene + ', null, MERGE, BLEND(1))');
+            }
+          }
+          return; // готово, polling зупиняється
+        } catch (e) {
+          // ще не готовий, продовжуємо poll
+        }
+      }
+
+      if (attempts < MAX_ATTEMPTS) {
+        setTimeout(tryStart, 200);
+      }
+    }
+
+    // Стартова затримка — даємо swfaddress шанс відпрацювати першим.
+    setTimeout(tryStart, 1200);
+  })();
 </script>
 
 </body>
