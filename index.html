@@ -75,10 +75,15 @@ body {
         try {
           // API готовий — перевіряємо чи завантажена сцена
           if (!k.get('xml.scene')) {
-            var firstScene = k.get('scene[0].name');
-            if (firstScene) {
-              k.call('loadscene(' + firstScene + ', null, MERGE, BLEND(1))');
-            }
+            // ВАЖЛИВО: scene[0] (s00) — це сцена-роутер, яка через
+            // XML-action перенаправляє на справжню стартову сцену.
+            // У cross-origin iframe цей роутер не спрацьовує
+            // (залежить від swfaddress). Тому йдемо одразу на s100 —
+            // це справжня перша панорама (мапиться на /start/ у swfaddress.xml).
+            // Якщо у вашому турі стартова сцена має іншу назву —
+            // замініть 's100' нижче на коректне ім'я.
+            var startScene = 's100';
+            k.call('loadscene(' + startScene + ', null, MERGE, BLEND(1))');
           }
           return; // готово, polling зупиняється
         } catch (e) {
