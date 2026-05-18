@@ -46,7 +46,23 @@ body {
       html5: "prefer",
       mobilescale: 1.0,
       passQueryParameters: true,
-      initvars: { address_swf: "true", lang: "uk" }
+      initvars: { address_swf: "true", lang: "uk" },
+      onready: function(krpano) {
+        // IFRAME FALLBACK:
+        // Коли тур запущений всередині iframe (window !== top), плагін
+        // swfaddress не тригерить завантаження стартової сцени через
+        // обмеження браузера. Як наслідок — чорний екран. Тут робимо
+        // підстраховку: після готовності krpano перевіряємо, чи активна
+        // якась сцена; якщо ні — підвантажуємо першу сцену з XML.
+        setTimeout(function() {
+          if (!krpano.get('xml.scene')) {
+            var firstScene = krpano.get('scene[0].name');
+            if (firstScene) {
+              krpano.call('loadscene(' + firstScene + ', null, MERGE, BLEND(1))');
+            }
+          }
+        }, 800);
+      }
     });
   </script>
 </div>
