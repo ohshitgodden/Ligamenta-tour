@@ -1,0 +1,528 @@
+﻿<krpano>
+
+
+							<!--Текст при наведении на кнопки нижней панельки-->
+ <phrase name="left" >
+		<language name="ua" text="вліво" />
+		<language name="ru" text="влево" />
+		<language name="en" text="left" />
+		<language name="pl" text="" />
+ </phrase>						
+
+ <phrase name="right" >
+		<language name="ua" text="вправо" />
+		<language name="ru" text="вправо" />
+		<language name="en" text="right" />
+		<language name="pl" text="" />
+ </phrase>							
+
+ <phrase name="top" >
+		<language name="ua" text="вгору" />
+		<language name="ru" text="вверх" />
+		<language name="en" text="up" />
+		<language name="pl" text="" />
+ </phrase>							
+
+ <phrase name="bottom" >
+		<language name="ua" text="вниз" />
+		<language name="ru" text="вниз" />
+		<language name="en" text="down" />
+		<language name="pl" text="" />
+ </phrase>							
+
+ <phrase name="out" >
+		<language name="ua" text="віддалити" />
+		<language name="ru" text="отдалить" />
+		<language name="en" text="zoom out" />
+		<language name="pl" text="" />
+ </phrase>							
+
+ <phrase name="on" >
+		<language name="ua" text="наблизити" />
+		<language name="ru" text="приблизить" />
+		<language name="en" text="zoom in" />
+		<language name="pl" text="" />
+ </phrase>							
+
+ <phrase name="full" >
+		<language name="ua" text="на весь екран" />
+		<language name="ru" text="на весь экран" />
+		<language name="en" text="full screen" />
+		<language name="pl" text="" />
+ </phrase>							
+
+ <phrase name="window" >
+		<language name="ua" text="віконний режим" />
+		<language name="ru" text="оконный режим" />
+		<language name="en" text="windowed" />
+		<language name="pl" text="" />
+ </phrase>					
+
+ <phrase name="open_gal_on" >
+		<language name="ua" text="показати галерею" />
+		<language name="ru" text="показать галерею" />
+		<language name="en" text="view gallery" />
+		<language name="pl" text="" />
+ </phrase>					
+
+ <phrase name="open_gal_off" >
+		<language name="ua" text="сховати галерею" />
+		<language name="ru" text="скрыть галерею" />
+		<language name="en" text="hide gallery" />
+		<language name="pl" text="" />
+ </phrase>					
+
+ <phrase name="all_pano" >
+		<language name="ua" text="Всі панорами" />
+		<language name="ru" text="Все панорамы" />
+		<language name="en" text="All panoramas" />
+		<language name="pl" text="" />
+ </phrase>					
+
+ <phrase name="aero" >
+		<language name="ua" text="Аеро панорама" />
+		<language name="ru" text="Аэро панорама" />
+		<language name="en" text="Air panorama" />
+		<language name="pl" text="" />
+ </phrase>					
+
+ <phrase name="watch" >
+		<language name="ua" text="Дивитись" />
+		<language name="ru" text="Смотреть" />
+		<language name="en" text="Watch" />
+		<language name="pl" text="Start" />
+ </phrase>
+ 
+  				
+
+ <phrase name="text_icon0" >
+		<language name="ru" text="1-й этаж" />
+		<language name="ua" text="" />
+ </phrase> 			
+
+ <phrase name="text_icon1" >
+		<language name="ru" text="Стационар (2-й этаж)" />
+		<language name="ua" text="" />
+ </phrase> 			
+
+ <phrase name="text_icon2" >
+		<language name="ru" text="Операционный блок" />
+		<language name="ua" text="" />
+ </phrase> 			
+
+ <phrase name="text_icon3" >
+		<language name="ru" text="Стационар (4-й этаж)" />
+		<language name="ua" text="" />
+ </phrase> 			
+
+ <phrase name="text_icon4" >
+		<language name="ru" text="" />
+		<language name="ua" text="" />
+		<language name="en" text="" />
+ </phrase> 			
+
+ <phrase name="to_catalog" >
+ 		<language name="ru" text="Натисни для переходу в каталог" />
+ 		<language name="ua" text="Кликни для перехода в каталог" />
+ 		<language name="en" text="Click to go to the catalog" />
+ 		<language name="pl" text="" />
+  </phrase> 
+ 
+ 	
+  				
+
+ <phrase name="text_1" >
+		<language name="ru" text="Приветствуем Вас в Ортопедичнеской клинике Ligamenta! [br]" />
+		<language name="ua" text="Вітаємо Вас в Ортопедичній клініці Ligamenta! [br]" />
+		<language name="en" text="" /> 
+		<language name="pl" text="" />
+		<language name="url" text="pano1" />
+ </phrase> 			
+
+ <phrase name="impress_me" >
+		<language name="ru" text="ВИРТУАЛЬНЫЙ ТУР " />
+		<language name="ua" text="ВІРТУАЛЬНИЙ ТУР" />
+		<language name="en" text="VIRTUAL TOUR" />
+		<language name="pl" text="" />
+ </phrase> 			
+
+ <phrase name="start" >
+		<language name="ru" text="НАЧАТЬ" />
+		<language name="ua" text="РОЗПОЧАТИ" />
+		<language name="en" text="START" />
+		<language name="pl" text="" />
+ </phrase> 
+							<!--Название панорам--> 
+  
+  				
+
+ <phrase name="s00" >
+		<language name="ru" text="Аэро" />
+		<language name="ua" text="Аеро" />
+		<language name="en" text="Aero" />
+		<language name="url" text="start" />
+		<language name="info" text="" />
+ </phrase> 
+ <phrase name="s100" >
+		<language name="ru" text="Аэро" />
+		<language name="ua" text="Аеро" />
+		<language name="en" text="Aero" />
+		<language name="pl" text="" />
+		<language name="url" text="start" />
+		<language name="info" text="" />
+ </phrase> 
+ 
+
+ <phrase name="s0" >
+		<language name="ru" text="Аэро" />
+		<language name="ua" text="Аеро" />
+		<language name="en" text="Aero" />
+		<language name="pl" text="" />
+		<language name="url" text="aero" />
+		<language name="info" text="" />
+ </phrase>  				
+
+
+ <phrase name="to_hall" >
+		<language name="ru" text="Холл" />
+		<language name="ua" text="" />
+ </phrase>	
+
+
+ <phrase name="s01" >
+		<language name="ru" text="Панорама1" />
+		<language name="ua" text="" />
+		<language name="url" text="pano1" />
+ </phrase>	
+ 
+ <phrase name="s02" >
+		<language name="ru" text="Центральный вход" />
+		<language name="ua" text="" />
+		<language name="url" text="pano2" />
+ </phrase>	
+ 
+ <phrase name="s03" >
+		<language name="ru" text="Кабинет шефа клиники" />
+		<language name="ua" text="" />
+		<language name="url" text="pano3" />
+ </phrase>	
+ 
+ <phrase name="s04" >
+		<language name="ru" text="Ресепшен" />
+		<language name="ua" text="" />
+		<language name="url" text="pano4" />
+ </phrase>	
+ 
+ <phrase name="s05" >
+		<language name="ru" text="Панорама5" />
+		<language name="ua" text="" />
+		<language name="url" text="pano5" />
+ </phrase>	
+
+
+ <phrase name="s06" >
+		<language name="ru" text="Кабинет администратора" />
+		<language name="ua" text="" />
+		<language name="url" text="pano6" />
+ </phrase>	
+ 
+ <phrase name="to_s07" >
+		<language name="ru" text="Лестница на 1 этаж (ресепшен)" />
+		<language name="ua" text="" />
+		<language name="url" text="pano7" />
+ </phrase>	
+
+ <phrase name="s07" >
+		<language name="ru" text="Лестница на 2 этаж (стационар)" />
+		<language name="ua" text="" />
+		<language name="url" text="pano7" />
+ </phrase>	
+ 
+ <phrase name="s08" >
+		<language name="ru" text="Кабинет доктора" />
+		<language name="ua" text="" />
+		<language name="url" text="pano8" />
+ </phrase>	
+ 
+ <phrase name="s09" >
+		<language name="ru" text="Кабинет доктора" />
+		<language name="ua" text="" />
+		<language name="url" text="pano9" />
+ </phrase>	
+ 
+ <phrase name="s10" >
+		<language name="ru" text="Холл" />
+		<language name="ua" text="" />
+		<language name="url" text="pano10" />
+ </phrase>	
+ 
+ <phrase name="s11" >
+		<language name="ru" text="Холл" />
+		<language name="ua" text="" />
+		<language name="url" text="pano11" />
+ </phrase>	
+ 
+ <phrase name="s12" >
+		<language name="ru" text="Кабинет Реабилитации" />
+		<language name="ua" text="" />
+		<language name="url" text="pano12" />
+ </phrase>	
+ 
+ <phrase name="s13" >
+		<language name="ru" text="Кабинет реабилитации" />
+		<language name="ua" text="" />
+		<language name="url" text="pano13" />
+ </phrase>	
+ 
+ <phrase name="s14" >
+		<language name="ru" text="Кабинет реабилитации" />
+		<language name="ua" text="" />
+		<language name="url" text="pano14" />
+ </phrase>	
+ 
+ <phrase name="s15" >
+		<language name="ru" text="Блок МРТ" />
+		<language name="ua" text="" />
+		<language name="url" text="pano15" />
+ </phrase>	
+ 
+ <phrase name="s16" >
+		<language name="ru" text="МРТ" />
+		<language name="ua" text="" />
+		<language name="url" text="pano16" />
+ </phrase>	
+ 
+ <phrase name="s17" >
+		<language name="ru" text="Рентгенкабинет" />
+		<language name="ua" text="" />
+		<language name="url" text="pano17" />
+ </phrase>	
+ 
+ <phrase name="to_s17" >
+		<language name="ru" text="Рентгенкабинет" />
+		<language name="ua" text="" />
+		<language name="url" text="pano17" />
+ </phrase>	
+ 
+ <phrase name="s18" >
+		<language name="ru" text="Рентгенкабинет" />
+		<language name="ua" text="" />
+		<language name="url" text="pano18" />
+ </phrase>	
+ 
+ <phrase name="s19" >
+		<language name="ru" text="Пост медсестры" />
+		<language name="ua" text="" />
+		<language name="url" text="pano19" />
+ </phrase>	
+ 
+ <phrase name="s20" >
+		
+		<language name="ru" text="Манипуляционный кабинет" />
+		<language name="ua" text="" />
+		<language name="url" text="pano20" />
+ </phrase>	
+
+
+ <phrase name="s21" >
+		
+		<language name="ru" text="Холл" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano21" />
+ </phrase>					
+
+ <phrase name="s22" >
+		
+		<language name="ru" text="Палата" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano22" />
+ </phrase>					
+
+ <phrase name="s23" >
+		
+		<language name="ru" text="Панорама23" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano23" />
+ </phrase>					
+
+ <phrase name="s24" >
+		
+		<language name="ru" text="Санузел в палате" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano24" />
+ </phrase>					
+
+ <phrase name="s25" >
+		
+		<language name="ru" text="Терраса" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano25" />
+ </phrase>					
+
+ <phrase name="s26" >
+		
+		<language name="ru" text="Кабинет реабилитации" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano26" />
+ </phrase>					
+
+ <phrase name="s27" >
+		
+		<language name="ru" text="2 этаж. Стационар" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano27" />
+ </phrase>	
+ 
+ <phrase name="to_s27" >
+		
+		<language name="ru" text="2 этаж. Стационар" />
+
+ </phrase>					
+
+ <phrase name="s28" >
+		<language name="ru" text="Вход в операционный блок (3 этаж)" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano28" />
+ </phrase>					
+ <phrase name="to_s28" >
+		<language name="ru" text="Подъем на 3 этаж. Операционный блок" />
+ </phrase>					
+
+
+ <phrase name="s29" >
+		
+		<language name="ru" text="Раздевалка для персонала" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano29" />
+ </phrase>	
+  				
+
+ <phrase name="s30" >
+		
+		<language name="ru" text="Коридор" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano30" />
+ </phrase>	
+  				
+ <phrase name="s31" >
+		
+		<language name="ru" text="Упаковочная комната" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano31" />
+ </phrase>					
+
+ <phrase name="s32" >
+		
+		<language name="ru" text="Панорама32" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano32" />
+ </phrase>					
+
+ <phrase name="s33" >
+		
+		<language name="ru" text="Моечная комната" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano33" />
+ </phrase>					
+
+ <phrase name="s34" >
+		
+		<language name="ru" text="Блок стерилизации" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano34" />
+ </phrase>					
+
+ <phrase name="s35" >
+		
+		<language name="ru" text="Послеоперационный блок" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano35" />
+ </phrase>					
+
+ <phrase name="s36" >
+		
+		<language name="ru" text="Операционная" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano36" />
+ </phrase>					
+
+ <phrase name="s37" >
+		
+		<language name="ru" text="Предоперационная зона" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano37" />
+ </phrase>					
+
+ <phrase name="s38" >
+		
+		<language name="ru" text="Предоперационная зона" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano38" />
+ </phrase>					
+
+ <phrase name="s39" >
+		
+		<language name="ru" text="Предоперационная зона" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano39" />
+ </phrase>	 					
+
+ <phrase name="s40" >
+		
+		<language name="ru" text="Палата" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano40" />
+ </phrase>						
+
+ <phrase name="s41" >
+		
+		<language name="ru" text="4 этаж. Палаты" />
+		<language name="en" text="" />
+		<language name="pl" text="" />
+		<language name="ua" text="" />
+		<language name="url" text="pano41" />
+ </phrase>					
+
+				
+ 
+ </krpano>
