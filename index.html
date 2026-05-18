@@ -1,50 +1,61 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="uk">
 <head>
-	<title>Профессиональное создание виртуальных туров и 3D-панорам 3DTour!</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
-	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-	<meta http-equiv="x-ua-compatible" content="IE=edge" />
-	<link href='http://fonts.googleapis.com/css?family=Helvetica' rel='stylesheet' type='text/css'>
-	<style>
-		@-ms-viewport { width: device-width; }
-		@media only screen and (min-device-width: 800px) { html { overflow:hidden; } }
-		html { height:100%; }
-		body { height:100%; overflow:hidden; margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:16px; color:#FFFFFF; background-color:#000000; }
-	
-#container {width: 100%; height: 100%; margin: 0px auto;}
-	</style>
-	</head>
-<body> 
+<meta charset="utf-8" />
+<title>Віртуальний 3D-тур клінікою Ligamenta</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta http-equiv="x-ua-compatible" content="IE=edge" />
+<meta name="referrer" content="no-referrer-when-downgrade" />
+<style>
+@-ms-viewport { width: device-width; }
+@media only screen and (min-device-width: 800px) { html { overflow: hidden; } }
+html { height: 100%; }
+body {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #FFFFFF;
+  background-color: #000000;
+}
+#pano { width: 100%; height: 100%; }
+</style>
+</head>
+<body>
 
 <script src="3dtour.js"></script>
 <script src="plugin/swfaddress.js?tracker=null"></script>
 
-<div id="pano" style="width:100%;height:100%;">
-	<noscript><table style="width:100%;height:100%;"><tr style="vertical-align:middle;text-align:center;"><td>ERROR:<br><br>Javascript not activated<br><br></td></tr></table></noscript>
-	<script>
-		embedpano({swf:"3dtour.swf", xml:"3dtour.xml", target:"pano", html5:"prefer", mobilescale:1.0, passQueryParameters:true, initvars:{address_swf:"true",lang:"ru"}});
-	</script>
+<div id="pano">
+  <noscript>
+    <table style="width:100%;height:100%;">
+      <tr style="vertical-align:middle;text-align:center;">
+        <td>ERROR:<br><br>Для роботи 3D-туру потрібно увімкнути JavaScript.<br><br></td>
+      </tr>
+    </table>
+  </noscript>
+  <script>
+    embedpano({
+      swf: "3dtour.swf",
+      xml: "3dtour.xml",
+      target: "pano",
+      html5: "prefer",
+      mobilescale: 1.0,
+      passQueryParameters: true,
+      initvars: { address_swf: "true", lang: "uk" }
+    });
+  </script>
 </div>
 
-<script type='text/javascript'>
-function krpano() 
-{
-	return document.getElementById('krpanoSWFObject')
-	};
-function back() 
-{
-	history.back()
-}
-function forward() 
-{
-	history.forward()
-}
+<script>
+  function krpano() { return document.getElementById('krpanoSWFObject'); }
+  function back()    { history.back(); }
+  function forward() { history.forward(); }
 </script>
-
-
 
 </body>
 </html>
