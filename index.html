@@ -27,8 +27,9 @@ body {
 </head>
 <body>
 
+<!-- krpano core loader. swfaddress (deep-linking plugin) видалено, бо ламає тур
+     при вбудові у cross-origin iframe (Webflow ↔ GitHub Pages). -->
 <script src="3dtour.js"></script>
-<script src="plugin/swfaddress.js?tracker=null"></script>
 
 <div id="pano">
   <noscript>
@@ -45,8 +46,7 @@ body {
       target: "pano",
       html5: "prefer",
       mobilescale: 1.0,
-      passQueryParameters: true,
-      initvars: { address_swf: "true", lang: "uk" }
+      initvars: { address_swf: "false", lang: "uk" }
     });
   </script>
 </div>
