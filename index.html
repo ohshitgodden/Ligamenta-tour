@@ -45,7 +45,6 @@ body {
       target: "pano",
       html5: "prefer",
       mobilescale: 1.0,
-      passQueryParameters: true,
       initvars: { address_swf: "true", lang: "uk" }
     });
   </script>
@@ -56,54 +55,39 @@ body {
   function back()    { history.back(); }
   function forward() { history.forward(); }
 
-  // ===== IFRAME-aware initial scene loader =====
+  // ===== Brute-force initial scene loader =====
   // У cross-origin iframe (наприклад, GitHub Pages → Webflow) плагін
-  // swfaddress не може коректно встановити URL-хеш батьківського вікна
-  // через обмеження браузера. Як наслідок, сцена-роутер s00 не отримує
-  // тригер для перенаправлення на справжню стартову сцену s100, і тур
-  // лишається на чорному екрані. Тут — багатоетапна підстраховка:
-  //   1. Якщо ми В iframe — примусово форсимо loadscene(s100) повторно
-  //      кілька разів (krpano інколи стартує з затримкою).
-  //   2. Якщо standalone — swfaddress сам впорається, але робимо
-  //      одноразову перевірку через 2 секунди.
-  // Якщо у вашому турі стартова сцена має іншу назву — замініть 's100'.
+  // swfaddress не може встановити URL-хеш у батьківському вікні через
+  // обмеження браузера. Як наслідок, сцена-роутер s00 не перенаправляє
+  // на справжню стартову s100, і тур чорний. Тут найгрубіший підхід:
+  // кожні 600мс протягом 15 секунд викликаємо loadscene(s100) безумовно.
+  // krpano ігнорує повторні виклики тієї ж сцени, тож це не зашкодить.
+  // Як тільки krpano API доступний — сцена завантажиться.
   (function () {
     var TARGET_SCENE = 's100';
-    var isInIframe = (window.self !== window.top);
+    var attempts = 0;
+    var MAX_ATTEMPTS = 25; // ~15 секунд
+    var loadedOnce = false;
 
-    function forceLoad() {
+    var interval = setInterval(function () {
+      attempts++;
       var k = document.getElementById('krpanoSWFObject');
-      if (k && typeof k.get === 'function') {
+
+      if (k && typeof k.call === 'function') {
         try {
-          var currentScene = k.get('xml.scene');
-          // У iframe — завжди форсимо s100, навіть якщо щось завантажене,
-          // бо це може бути проміжна (роутерна) сцена s00.
-          // У standalone — викликаємо тільки якщо сцена ще не активна.
-          if (isInIframe || !currentScene) {
-            if (!currentScene || currentScene !== TARGET_SCENE) {
-              k.call('loadscene(' + TARGET_SCENE + ', null, MERGE, BLEND(1))');
-            }
-          }
-          return true; // krpano готовий
-        } catch (e) { /* not ready yet */ }
-      }
-      return false;
-    }
-
-    function pollAndLoad() {
-      var attempts = 0;
-      var MAX = 80; // ~16 секунд
-
-      function tick() {
-        attempts++;
-        if (forceLoad()) return; // готово
-        if (attempts < MAX) setTimeout(tick, 200);
+          k.call('loadscene(' + TARGET_SCENE + ', null, MERGE, BLEND(1))');
+          loadedOnce = true;
+        } catch (e) { /* not ready */ }
       }
 
-      setTimeout(tick, isInIframe ? 500 : 1500);
-    }
-
-    pollAndLoad();
+      // Як тільки сцена завантажилась і повторно підтвердилась — стоп.
+      if (loadedOnce && attempts > 3) {
+        clearInterval(interval);
+      }
+      if (attempts >= MAX_ATTEMPTS) {
+        clearInterval(interval);
+      }
+    }, 600);
   })();
 </script>
 
