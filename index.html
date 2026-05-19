@@ -31,26 +31,41 @@ body {
 
 <script>
   // У cross-origin iframe плагін swfaddress.js падає з SecurityError,
-  // бо намагається читати top.document для синхронізації URL з батьківським
-  // вікном (для deep-linking). Браузер блокує це з причин безпеки, виняток
-  // не перехоплюється, і це ламає ініціалізацію krpano — тур чорний.
-  //
-  // Розв'язок:
-  //   • в iframe — НЕ завантажуємо swfaddress.js. Замість нього підкладаємо
-  //     stub-об'єкт із no-op методами. Плагін sa.js, який krpano підвантажує
-  //     з XML, очікує саме цей API і буде задоволений stub-ом.
-  //   • standalone — завантажуємо справжній swfaddress.js як було.
-  //
-  // Платою за stub є втрата URL-deep-linking при перегляді в iframe (хеш
-  // батьківської сторінки не буде змінюватись при переходах між сценами).
-  // Для embed-сценарію це навіть бажана поведінка.
+  // бо намагається читати top.document. Замість нього підкладаємо stub.
+  // У standalone — завантажуємо справжній плагін.
   (function () {
     if (window.self !== window.top) {
       window.SWFAddress = {
-        getValue: function () { return ''; },
-        setValue: function () {},
-        addEventListener: function () {},
-        removeEventListener: function () {},
+        _v: '',
+        _listeners: [],
+        getValue: function () { return this._v; },
+        setValue: function (v) {
+          this._v = v || '';
+          // Якщо setValue викликається з шляхом сцени (наприклад "/s05/"),
+          // напряму просимо krpano завантажити цю сцену. Це робить
+          // навігацію між сценами робочою без справжнього swfaddress.
+          if (v && typeof v === 'string') {
+            var m = v.match(/^\/?([^\/?#]+)/);
+            if (m && m[1]) {
+              var k = document.getElementById('krpanoSWFObject');
+              if (k && k.call) {
+                try { k.call('loadscene(' + m[1] + ', null, MERGE, BLEND(1))'); } catch (e) {}
+              }
+            }
+          }
+          // Імітуємо подію зміни для слухачів (плагін sa.js).
+          var ev = { value: this._v, type: 'change' };
+          for (var i = 0; i < this._listeners.length; i++) {
+            try { this._listeners[i](ev); } catch (e) {}
+          }
+        },
+        addEventListener: function (type, fn) {
+          if (type === 'change' && typeof fn === 'function') this._listeners.push(fn);
+        },
+        removeEventListener: function (type, fn) {
+          if (type !== 'change') return;
+          this._listeners = this._listeners.filter(function (f) { return f !== fn; });
+        },
         setHistory: function () {},
         setTitle: function () {},
         getTitle: function () { return document.title; },
@@ -62,8 +77,7 @@ body {
         go: function () {}
       };
     } else {
-      // Завантажуємо справжній swfaddress.js синхронно (через document.write),
-      // щоб ініціалізація встигла до виклику embedpano нижче.
+      // Standalone — справжній плагін, синхронно через document.write
       document.write('<scr' + 'ipt src="plugin/swfaddress.js?tracker=null"><\/scr' + 'ipt>');
     }
   })();
@@ -84,6 +98,7 @@ body {
       target: "pano",
       html5: "prefer",
       mobilescale: 1.0,
+      passQueryParameters: true,
       initvars: { address_swf: "true", lang: "uk" }
     });
   </script>
@@ -94,40 +109,40 @@ body {
   function back()    { history.back(); }
   function forward() { history.forward(); }
 
-  // ===== Brute-force initial scene loader =====
-  // У cross-origin iframe (наприклад, GitHub Pages → Webflow) плагін
-  // swfaddress не може встановити URL-хеш у батьківському вікні через
-  // обмеження браузера. Як наслідок, сцена-роутер s00 не перенаправляє
-  // на справжню стартову s100, і тур чорний. Тут найгрубіший підхід:
-  // кожні 600мс протягом 15 секунд викликаємо loadscene(s100) безумовно.
-  // krpano ігнорує повторні виклики тієї ж сцени, тож це не зашкодить.
-  // Як тільки krpano API доступний — сцена завантажиться.
-  (function () {
-    var TARGET_SCENE = 's100';
-    var attempts = 0;
-    var MAX_ATTEMPTS = 25; // ~15 секунд
-    var loadedOnce = false;
+  // ===== Initial scene loader — ТІЛЬКИ для iframe =====
+  // У standalone справжній swfaddress сам завантажить /start/ -> s100.
+  // У iframe ми це робимо самі. Чекаємо, поки krpano завершить ініціалізацію
+  // XML (включно з UI-елементами в xml/user_setup.xml, xml/arrows.xml тощо),
+  // і тільки після цього викликаємо loadscene. Це критично — якщо викликати
+  // loadscene до повного завантаження XML, krpano пропустить підключення UI.
+  if (window.self !== window.top) {
+    (function () {
+      var TARGET = 's100';
+      var attempts = 0;
+      var MAX = 40;
 
-    var interval = setInterval(function () {
-      attempts++;
-      var k = document.getElementById('krpanoSWFObject');
-
-      if (k && typeof k.call === 'function') {
+      function isReady(k) {
+        if (!k || typeof k.get !== 'function') return false;
         try {
-          k.call('loadscene(' + TARGET_SCENE + ', null, MERGE, BLEND(1))');
-          loadedOnce = true;
-        } catch (e) { /* not ready */ }
+          // XML повністю завантажений, коли вже відомо xml.url і кількість сцен > 0
+          return k.get('xml.url') && Number(k.get('scene.count')) > 0;
+        } catch (e) { return false; }
       }
 
-      // Як тільки сцена завантажилась і повторно підтвердилась — стоп.
-      if (loadedOnce && attempts > 3) {
-        clearInterval(interval);
+      function tick() {
+        attempts++;
+        var k = document.getElementById('krpanoSWFObject');
+        if (isReady(k)) {
+          try { k.call('loadscene(' + TARGET + ', null, MERGE, BLEND(1))'); } catch (e) {}
+          return; // одного разу досить
+        }
+        if (attempts < MAX) setTimeout(tick, 300);
       }
-      if (attempts >= MAX_ATTEMPTS) {
-        clearInterval(interval);
-      }
-    }, 600);
-  })();
+
+      // Стартова затримка — даємо krpano час почати завантаження XML.
+      setTimeout(tick, 800);
+    })();
+  }
 </script>
 
 </body>
