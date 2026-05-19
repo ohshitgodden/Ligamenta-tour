@@ -1,45 +1,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Профессиональное создание виртуальных туров и 3D-панорам 3DTour!</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
-	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-	<meta http-equiv="x-ua-compatible" content="IE=edge" />
-	<link href='http://fonts.googleapis.com/css?family=Helvetica' rel='stylesheet' type='text/css'>
-	<style>
-		@-ms-viewport { width: device-width; }
-		@media only screen and (min-device-width: 800px) { html { overflow:hidden; } }
-		html { height:100%; }
-		body { height:100%; overflow:hidden; margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:16px; color:#FFFFFF; background-color:#000000; }
-	
+<title>Профессиональное создание виртуальных туров и 3D-панорам 3DTour!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta http-equiv="x-ua-compatible" content="IE=edge" />
+<link href='https://fonts.googleapis.com/css?family=Helvetica' rel='stylesheet' type='text/css'>
+<style>
+@-ms-viewport { width: device-width; }
+@media only screen and (min-device-width: 800px) { html { overflow:hidden; } }
+html { height:100%; }
+body { height:100%; overflow:hidden; margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:16px; color:#FFFFFF; background-color:#000000; }
 #container {width: 100%; height: 100%; margin: 0px auto;}
-	</style>
-	</head>
-<body> 
-
+</style>
+</head>
+<body>
 <script src="3dtour.js"></script>
-<script src="plugin/swfaddress.js?tracker=null"></script>
+
+<script>
+  /*
+   * Завантаження swfaddress.js у sandbox, де top і parent shadowed на window.
+   *
+   * Чому це потрібно:
+   * Коли цей файл відкритий у cross-origin iframe (наприклад, GitHub Pages
+   * усередині Webflow), оригінальний swfaddress.js на самому початку
+   * звертається до top.document для синхронізації URL з батьківським вікном.
+   * Браузер блокує цей доступ із причин безпеки — кидає SecurityError. Цей
+   * виняток не перехоплюється і фактично зриває ініціалізацію плагіна, що
+   * призводить до чорного екрану і відсутності UI у iframe.
+   *
+   * Розв'язок: завантажуємо вміст файлу через синхронний XHR (тут same-origin,
+   * тож обмеження не діють) і виконуємо його через new Function(...) у замиканні,
+   * де параметри top та parent перевизначені на window. Таким чином у середині
+   * плагіна звернення на кшталт top.document веде на наш власний документ —
+   * cross-origin перевірка не спрацьовує, ніяких помилок.
+   *
+   * У standalone-режимі поведінка не змінюється — там top === window і так.
+   * Сам swfaddress.js НЕ модифікується — обходимо проблему ззовні.
+   */
+  (function loadSwfAddressSafely() {
+    try {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'plugin/swfaddress.js?tracker=null', false); // sync
+      xhr.send();
+      if (xhr.status >= 200 && xhr.status < 400 && xhr.responseText) {
+        // Виконуємо у замиканні з підміненими top і parent. Додаємо
+        // експорт SWFAddress у window — змінні, оголошені через var
+        // всередині new Function, є локальними, тому без явного експорту
+        // вони не стануть глобальними.
+        var patched = xhr.responseText +
+          ';\ntry { if (typeof SWFAddress !== "undefined") window.SWFAddress = SWFAddress; } catch(e){}';
+        new Function('top', 'parent', patched)(window, window);
+        return;
+      }
+    } catch (e) {
+      // Якщо XHR з якоїсь причини не спрацював — фолбек на класичне завантаження.
+    }
+    document.write('<scr' + 'ipt src="plugin/swfaddress.js?tracker=null"><\/scr' + 'ipt>');
+  })();
+</script>
 
 <div id="pano" style="width:100%;height:100%;">
-	<noscript><table style="width:100%;height:100%;"><tr style="vertical-align:middle;text-align:center;"><td>ERROR:<br><br>Javascript not activated<br><br></td></tr></table></noscript>
-	<script>
-		embedpano({swf:"3dtour.swf", xml:"3dtour.xml", target:"pano", html5:"prefer", mobilescale:1.0, passQueryParameters:true, initvars:{address_swf:"true",lang:"ru"}});
-	</script>
+<noscript><table style="width:100%;height:100%;"><tr style="vertical-align:middle;text-align:center;"><td>ERROR:<br><br>Javascript not activated<br><br></td></tr></table></noscript>
+<script>
+embedpano({swf:"3dtour.swf", xml:"3dtour.xml", target:"pano", html5:"prefer", mobilescale:1.0, passQueryParameters:true, initvars:{address_swf:"true",lang:"ru"}});
+</script>
 </div>
-
 <script type='text/javascript'>
-function krpano() 
+function krpano()
 {
-	return document.getElementById('krpanoSWFObject')
-	};
-function back() 
+return document.getElementById('krpanoSWFObject')
+};
+function back()
 {
-	history.back()
+history.back()
 }
-function forward() 
+function forward()
 {
-	history.forward()
+history.forward()
 }
 </script>
+</body>
+</html>
