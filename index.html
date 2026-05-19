@@ -28,7 +28,46 @@ body {
 <body>
 
 <script src="3dtour.js"></script>
-<script src="plugin/swfaddress.js?tracker=null"></script>
+
+<script>
+  // У cross-origin iframe плагін swfaddress.js падає з SecurityError,
+  // бо намагається читати top.document для синхронізації URL з батьківським
+  // вікном (для deep-linking). Браузер блокує це з причин безпеки, виняток
+  // не перехоплюється, і це ламає ініціалізацію krpano — тур чорний.
+  //
+  // Розв'язок:
+  //   • в iframe — НЕ завантажуємо swfaddress.js. Замість нього підкладаємо
+  //     stub-об'єкт із no-op методами. Плагін sa.js, який krpano підвантажує
+  //     з XML, очікує саме цей API і буде задоволений stub-ом.
+  //   • standalone — завантажуємо справжній swfaddress.js як було.
+  //
+  // Платою за stub є втрата URL-deep-linking при перегляді в iframe (хеш
+  // батьківської сторінки не буде змінюватись при переходах між сценами).
+  // Для embed-сценарію це навіть бажана поведінка.
+  (function () {
+    if (window.self !== window.top) {
+      window.SWFAddress = {
+        getValue: function () { return ''; },
+        setValue: function () {},
+        addEventListener: function () {},
+        removeEventListener: function () {},
+        setHistory: function () {},
+        setTitle: function () {},
+        getTitle: function () { return document.title; },
+        setStrict: function () {},
+        getStrict: function () { return false; },
+        setTracker: function () {},
+        back: function () {},
+        forward: function () {},
+        go: function () {}
+      };
+    } else {
+      // Завантажуємо справжній swfaddress.js синхронно (через document.write),
+      // щоб ініціалізація встигла до виклику embedpano нижче.
+      document.write('<scr' + 'ipt src="plugin/swfaddress.js?tracker=null"><\/scr' + 'ipt>');
+    }
+  })();
+</script>
 
 <div id="pano">
   <noscript>
