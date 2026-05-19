@@ -56,48 +56,54 @@ body {
   function back()    { history.back(); }
   function forward() { history.forward(); }
 
-  // ===== IFRAME / fallback initial scene loader =====
-  // Стара версія embedpano не підтримує onready-callback, тому замість нього
-  // використовуємо polling. Кожні 200мс перевіряємо чи API krpano готовий.
-  // Як тільки готовий — якщо жодна сцена не активна (типовий стан в iframe,
-  // де swfaddress не тригерить початкове завантаження через cross-origin),
-  // вручну завантажуємо першу сцену з XML. У standalone-режимі swfaddress
-  // встигне першим — і polling нічого не зробить.
+  // ===== IFRAME-aware initial scene loader =====
+  // У cross-origin iframe (наприклад, GitHub Pages → Webflow) плагін
+  // swfaddress не може коректно встановити URL-хеш батьківського вікна
+  // через обмеження браузера. Як наслідок, сцена-роутер s00 не отримує
+  // тригер для перенаправлення на справжню стартову сцену s100, і тур
+  // лишається на чорному екрані. Тут — багатоетапна підстраховка:
+  //   1. Якщо ми В iframe — примусово форсимо loadscene(s100) повторно
+  //      кілька разів (krpano інколи стартує з затримкою).
+  //   2. Якщо standalone — swfaddress сам впорається, але робимо
+  //      одноразову перевірку через 2 секунди.
+  // Якщо у вашому турі стартова сцена має іншу назву — замініть 's100'.
   (function () {
-    var attempts = 0;
-    var MAX_ATTEMPTS = 60; // ~12 секунд максимум
+    var TARGET_SCENE = 's100';
+    var isInIframe = (window.self !== window.top);
 
-    function tryStart() {
-      attempts++;
+    function forceLoad() {
       var k = document.getElementById('krpanoSWFObject');
-
       if (k && typeof k.get === 'function') {
         try {
-          // API готовий — перевіряємо чи завантажена сцена
-          if (!k.get('xml.scene')) {
-            // ВАЖЛИВО: scene[0] (s00) — це сцена-роутер, яка через
-            // XML-action перенаправляє на справжню стартову сцену.
-            // У cross-origin iframe цей роутер не спрацьовує
-            // (залежить від swfaddress). Тому йдемо одразу на s100 —
-            // це справжня перша панорама (мапиться на /start/ у swfaddress.xml).
-            // Якщо у вашому турі стартова сцена має іншу назву —
-            // замініть 's100' нижче на коректне ім'я.
-            var startScene = 's100';
-            k.call('loadscene(' + startScene + ', null, MERGE, BLEND(1))');
+          var currentScene = k.get('xml.scene');
+          // У iframe — завжди форсимо s100, навіть якщо щось завантажене,
+          // бо це може бути проміжна (роутерна) сцена s00.
+          // У standalone — викликаємо тільки якщо сцена ще не активна.
+          if (isInIframe || !currentScene) {
+            if (!currentScene || currentScene !== TARGET_SCENE) {
+              k.call('loadscene(' + TARGET_SCENE + ', null, MERGE, BLEND(1))');
+            }
           }
-          return; // готово, polling зупиняється
-        } catch (e) {
-          // ще не готовий, продовжуємо poll
-        }
+          return true; // krpano готовий
+        } catch (e) { /* not ready yet */ }
       }
-
-      if (attempts < MAX_ATTEMPTS) {
-        setTimeout(tryStart, 200);
-      }
+      return false;
     }
 
-    // Стартова затримка — даємо swfaddress шанс відпрацювати першим.
-    setTimeout(tryStart, 1200);
+    function pollAndLoad() {
+      var attempts = 0;
+      var MAX = 80; // ~16 секунд
+
+      function tick() {
+        attempts++;
+        if (forceLoad()) return; // готово
+        if (attempts < MAX) setTimeout(tick, 200);
+      }
+
+      setTimeout(tick, isInIframe ? 500 : 1500);
+    }
+
+    pollAndLoad();
   })();
 </script>
 
